@@ -1,0 +1,24 @@
+type User {
+  id: ID! @unique
+  name:String!
+  email: String! @unique
+  comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
+  blogs: [Blog!]! @relation(name: "BlogOwner", onDelete: CASCADE)
+  dummy: String
+}
+
+type Blog {
+  id: ID! @unique
+  title:String!
+  comments: [Comment!]! @relation(name: "Comments", onDelete: CASCADE)
+  owner: User! @relation(name: "BlogOwner", onDelete: SET_NULL)
+  dummy: String
+}
+
+type Comment {
+  id: ID! @unique
+  content:String!
+  blog: Blog! @relation(name: "Comments", onDelete: SET_NULL)
+  author: User @relation(name: "CommentAuthor", onDelete: SET_NULL)
+  dummy: String
+}

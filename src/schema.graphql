@@ -1,0 +1,22 @@
+# import * from './generated/prisma.graphql'
+
+type Query {  
+  currentuser:User!
+  user(where: UserWhereUniqueInput!): User 
+}
+
+type Mutation {
+    createUser(name:String!,email:String):User
+    createBlog(title:String!):Blog #当前用户
+    createComment(blogID:ID!, content:String!):Comment  #当前用户
+    updateComment(commentID:ID!, content:String!):Comment  #当前用户
+    deleteComment(commentID:ID!):Comment  #当前用户
+    deleteBlog(blogID:ID!):Blog  #当前用户 
+    createBlogByThisUser(title:String!,ownerUserID:ID!):Blog  
+    updateCommentsByKeyWords(keywordsinContent:String!, newContent:String!):BatchPayload
+    transCommentBetweenBlogs(fromBlogID:ID!,toBlogID:ID!):BatchPayload
+    deleteManyCommentsByKeywords(keywords:String!):BatchPayload
+    deleteUserByEmail(email:String!):User 
+}
+
+ 

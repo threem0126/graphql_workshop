@@ -1,0 +1,20 @@
+{
+  "apps": [
+    {
+      "name": "zhuli_tool",
+      "script": "server-load.js",
+      "exec_mode": "cluster",
+      "max_memory_restart": "150M",
+      "cwd": "",
+      "instances": "2",
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": "8026",
+        "SQL_PRINT": "0",
+        "REDIS_SESSION": 1
+      },
+      "error_file"      : "/data/pm2-logs/zhuli_tool/error.log",
+      "out_file"        : "/data/pm2-logs/zhuli_tool/out.log"
+    }
+  ]
+}

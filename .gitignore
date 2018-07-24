@@ -1,0 +1,23 @@
+# build output
+dist
+build
+.next
+.idea
+.install
+.vscode
+.DS_Store
+
+# dependencies
+node_modules
+package-lock.json
+yarn.lock
+
+# logs
+*.log
+
+# coverage
+.nyc_output
+coverage
+
+# test output
+test/**/out
