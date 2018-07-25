@@ -1,12 +1,19 @@
-
+import { getUserId,AuthError } from '../utils'
+import { forwardTo } from "prisma-binding";
+import {isMutation, isQuery, isQuery_forwardTo} from './resolvers.loader' 
 
 let _run={
   currentUserID_mock:0
 }
 
-const blog = {
+class BlogMutation {
+  constructor() {
+      throw '静态业务功能类无法实例化'
+  }
+  
   // createBlog(title:String!):Blog #当前用户
-  async createBlog(parent, { title }, ctx, info) {
+  @isMutation
+  static async createBlog(parent, { title }, ctx, info) {
     const {userId = _run.currentUserID_mock} = ctx
     return ctx.db.mutation.createBlog(
       {
@@ -21,10 +28,11 @@ const blog = {
       },
       info
     )
-  },
+  }
 
   // createComment(blogID:ID!, content:String!):Comment  #当前用户 
-  async createComment(parent, { blogID, content }, ctx, info) {
+  @isMutation
+  static async createComment(parent, { blogID, content }, ctx, info) {
     const {userId = _run.currentUserID_mock} = ctx
     const isBlogExist = ctx.db.exists.Blog({
         id:blogID,
@@ -52,10 +60,11 @@ const blog = {
       },
       info
     )
-  },
+  }
 
   //updateComment(commentID:ID!, content:String!):Comment  #当前用户
-  async updateComment(parent, { commentID, content }, ctx, info) {
+  @isMutation
+  static async updateComment(parent, { commentID, content }, ctx, info) {
     const {userId = _run.currentUserID_mock} = ctx
     const isCommentExist = ctx.db.exists.Comment({
         id:commentID,
@@ -72,10 +81,11 @@ const blog = {
       data:{content },
       where:{id:commentID}
     }, info) 
-  },
+  }
 
   // deleteComment(commentID:ID!):Comment  #当前用户 
-  async deleteComment(parent, { commentID }, ctx, info) { 
+  @isMutation
+  static async deleteComment(parent, { commentID }, ctx, info) { 
     const {userId = _run.currentUserID_mock} = ctx
     const isCommentExist = ctx.db.exists.Comment({
         id:commentID,
@@ -91,10 +101,11 @@ const blog = {
     return await ctx.db.mutation.deleteComment({where:{  
       id:commentID
     }}, info) 
-  },
+  }
 
   // deleteBlog(blogID:ID!):Blog  #当前用户 
-  async deleteBlog(parent, { blogID }, ctx, info) { 
+  @isMutation
+  static async deleteBlog(parent, { blogID }, ctx, info) { 
     const {userId = _run.currentUserID_mock} = ctx
     const isBlogExist = ctx.db.exists.Blog({
         id:blogID,
@@ -108,10 +119,11 @@ const blog = {
     return await ctx.db.mutation.deleteBlog({where:{  
       id:blogID
     }}, info) 
-  },
+  }
 
-  // createBlogByThisUser(title:String!,ownerUserID:ID!,defaultComments:[Comment!]):Blog 
-  async createBlogByThisUser(parent, { title, ownerUserID }, ctx, info) {  
+  // createBlogByThisUser(title:String!,ownerUserID:ID!,defaultComments:[Comment!]):Blog
+  @isMutation 
+  static async createBlogByThisUser(parent, { title, ownerUserID }, ctx, info) {  
     return await ctx.db.mutation.createBlog({
       data:{
         title,
@@ -125,10 +137,11 @@ const blog = {
         }
       }
     }, info) 
-  }, 
+  }
 
   // updateCommentsByKeyWords(keywordsinContent:String!, newContent:String!):BatchPayload 
-  async updateCommentsByKeyWords(parent, { keywordsinContent, newContent }, ctx, info) {  
+  @isMutation
+  static async updateCommentsByKeyWords(parent, { keywordsinContent, newContent }, ctx, info) {  
     return await ctx.db.mutation.updateManyComments({
       data:{
         content:newContent,
@@ -137,9 +150,11 @@ const blog = {
         content_contains:keywordsinContent
       }
     }, info)
-  },
+  }
+
   // transCommentBetweenBlogs(fromBlogID:ID!,toBlogID:ID!):BatchPayload
-  async transCommentBetweenBlogs(parent, { fromBlogID, toBlogID }, ctx, info) {  
+  @isMutation
+  static async transCommentBetweenBlogs(parent, { fromBlogID, toBlogID }, ctx, info) {  
     return await ctx.db.mutation.updateManyComments({
       data:{
         blog:{
@@ -154,27 +169,53 @@ const blog = {
         }
       }
     }, info)
-  },
-
+  }
 
   // deleteManyCommentsByKeywords(keywords:String!):BatchPayload
-  async deleteManyCommentsByKeywords(parent, { keywords }, ctx, info) {  
+  @isMutation
+  static async deleteManyCommentsByKeywords(parent, { keywords }, ctx, info) {  
     return await ctx.db.mutation.deleteManyComments({ 
       where:{  
         content_contains:keywords
       }
     }, info)
-  },
-
+  }
 
   // deleteUserByEmail(email:String!):User
-  async deleteUserByEmail(parent, { email }, ctx, info) {  
+  @isMutation
+  static async deleteUserByEmail(parent, { email }, ctx, info) {  
     return await ctx.db.mutation.deleteUser({ 
       where:{  
         email
       }
     }, info)
   }
+
+
+  @isQuery
+  static async currentuser(parent, args, ctx, info) { 
+    let { _hello } = ctx
+    console.log(_hello);
+    const {userId} = ctx
+    if(!userId)
+      throw new AuthError()
+    return ctx.db.query.user({where:{id:userId}}, `{id, name}`)
+  }
+
+  @isQuery_forwardTo 
+  static user(){ 
+    return forwardTo
+  }
+
+  @isQuery_forwardTo 
+  static users(){ 
+    return forwardTo
+  }
+
+  @isQuery_forwardTo 
+  static comments(){
+    return forwardTo
+  }
 }
 
-module.exports = { blog } 
+export default BlogMutation

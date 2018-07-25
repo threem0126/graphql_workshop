@@ -1,10 +1,10 @@
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
-const resolvers = require('./resolvers')
 const { RedisCache } = require('apollo-server-cache-redis');
 const { getUserId } = require('./utils')
 const { default: costAnalysis } = require('graphql-cost-analysis')
 const customDirectives = require('./directives');
+const resolvers = require('./models/_index.js')
 //https://github.com/pa-bru/graphql-cost-analysis#costanalysis-configuration
 
 const db = new Prisma({
