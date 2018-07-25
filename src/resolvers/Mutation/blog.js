@@ -4,24 +4,8 @@ let _run={
   currentUserID_mock:0
 }
 
-const blog = {  
-  //createUser(name:String!,email:String):User
-  async createUser(parent, { name, email }, ctx, info) {
-    let result = ctx.db.mutation.createUser(
-      {
-        data: {
-          name,
-          email
-        },
-      },
-      info
-    )
-    console.log(result) 
-    _run.currentUserID_mock = result.id
-    return result
-  }, 
-
-// createBlog(title:String!):Blog #当前用户
+const blog = {
+  // createBlog(title:String!):Blog #当前用户
   async createBlog(parent, { title }, ctx, info) {
     const {userId = _run.currentUserID_mock} = ctx
     return ctx.db.mutation.createBlog(
@@ -39,7 +23,7 @@ const blog = {
     )
   },
 
-  // createComment(blogID:ID!, content:String!):Comment  #当前用户
+  // createComment(blogID:ID!, content:String!):Comment  #当前用户 
   async createComment(parent, { blogID, content }, ctx, info) {
     const {userId = _run.currentUserID_mock} = ctx
     const isBlogExist = ctx.db.exists.Blog({

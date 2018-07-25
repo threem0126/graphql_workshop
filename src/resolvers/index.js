@@ -6,8 +6,8 @@ const { blog } = require('./Mutation/blog')
 module.exports = {
   Query,
   Mutation: {
-    // ...auth,
-    ...blog,
+    ...auth,
+    ...blog
   },
   // AuthPayload,
 }

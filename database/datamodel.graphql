@@ -2,8 +2,11 @@ type User {
   id: ID! @unique
   name:String!
   email: String! @unique
+  password: String! @default(value:"123456")
   comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
   blogs: [Blog!]! @relation(name: "BlogOwner", onDelete: CASCADE)
+  createdAt: DateTime!
+  updatedAt: DateTime!
   dummy: String
   fans: [User!]! @relation(name: "FansFollows", onDelete: SET_NULL)
   follows: [User!]! @relation(name: "FansFollows", onDelete: SET_NULL)
@@ -13,6 +16,8 @@ type User {
 type Blog {
   id: ID! @unique
   title:String!
+  createdAt:DateTime!
+  updatedAt:DateTime!
   comments: [Comment!]! @relation(name: "Comments", onDelete: CASCADE)
   owner: User! @relation(name: "BlogOwner", onDelete: SET_NULL)
   privateName:String
@@ -22,6 +27,8 @@ type Blog {
 type Comment {
   id: ID! @unique
   content:String!
+  createdAt:DateTime!
+  updatedAt:DateTime!
   blog: Blog! @relation(name: "Comments", onDelete: SET_NULL)
   author: User @relation(name: "CommentAuthor", onDelete: SET_NULL)
   dummy: String
