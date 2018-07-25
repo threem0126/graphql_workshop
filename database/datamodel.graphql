@@ -5,6 +5,9 @@ type User {
   comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
   blogs: [Blog!]! @relation(name: "BlogOwner", onDelete: CASCADE)
   dummy: String
+  fans: [User!]! @relation(name: "FansFollows", onDelete: SET_NULL)
+  follows: [User!]! @relation(name: "FansFollows", onDelete: SET_NULL)
+
 }
 
 type Blog {

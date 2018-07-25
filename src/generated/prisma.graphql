@@ -1,5 +1,5 @@
-# source: http://localhost:4466
-# timestamp: Wed Jul 25 2018 09:57:41 GMT+0800 (CST)
+# source: http://localhost:4488
+# timestamp: Wed Jul 25 2018 17:24:39 GMT+0800 (CST)
 
 type AggregateBlog {
   count: Int!
@@ -768,6 +768,8 @@ type User implements Node {
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   blogs(where: BlogWhereInput, orderBy: BlogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Blog!]
   dummy: String
+  fans(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  follows(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
 
 """A connection to a list of items."""
@@ -786,6 +788,18 @@ input UserCreateInput {
   dummy: String
   comments: CommentCreateManyWithoutAuthorInput
   blogs: BlogCreateManyWithoutOwnerInput
+  fans: UserCreateManyWithoutFollowsInput
+  follows: UserCreateManyWithoutFansInput
+}
+
+input UserCreateManyWithoutFansInput {
+  create: [UserCreateWithoutFansInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutFollowsInput {
+  create: [UserCreateWithoutFollowsInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateOneWithoutBlogsInput {
@@ -803,6 +817,8 @@ input UserCreateWithoutBlogsInput {
   email: String!
   dummy: String
   comments: CommentCreateManyWithoutAuthorInput
+  fans: UserCreateManyWithoutFollowsInput
+  follows: UserCreateManyWithoutFansInput
 }
 
 input UserCreateWithoutCommentsInput {
@@ -810,6 +826,26 @@ input UserCreateWithoutCommentsInput {
   email: String!
   dummy: String
   blogs: BlogCreateManyWithoutOwnerInput
+  fans: UserCreateManyWithoutFollowsInput
+  follows: UserCreateManyWithoutFansInput
+}
+
+input UserCreateWithoutFansInput {
+  name: String!
+  email: String!
+  dummy: String
+  comments: CommentCreateManyWithoutAuthorInput
+  blogs: BlogCreateManyWithoutOwnerInput
+  follows: UserCreateManyWithoutFansInput
+}
+
+input UserCreateWithoutFollowsInput {
+  name: String!
+  email: String!
+  dummy: String
+  comments: CommentCreateManyWithoutAuthorInput
+  blogs: BlogCreateManyWithoutOwnerInput
+  fans: UserCreateManyWithoutFollowsInput
 }
 
 """An edge in a connection."""
@@ -888,6 +924,26 @@ input UserUpdateInput {
   dummy: String
   comments: CommentUpdateManyWithoutAuthorInput
   blogs: BlogUpdateManyWithoutOwnerInput
+  fans: UserUpdateManyWithoutFollowsInput
+  follows: UserUpdateManyWithoutFansInput
+}
+
+input UserUpdateManyWithoutFansInput {
+  create: [UserCreateWithoutFansInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutFansInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutFansInput!]
+}
+
+input UserUpdateManyWithoutFollowsInput {
+  create: [UserCreateWithoutFollowsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutFollowsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutFollowsInput!]
 }
 
 input UserUpdateOneWithoutBlogsInput {
@@ -912,6 +968,8 @@ input UserUpdateWithoutBlogsDataInput {
   email: String
   dummy: String
   comments: CommentUpdateManyWithoutAuthorInput
+  fans: UserUpdateManyWithoutFollowsInput
+  follows: UserUpdateManyWithoutFansInput
 }
 
 input UserUpdateWithoutCommentsDataInput {
@@ -919,6 +977,36 @@ input UserUpdateWithoutCommentsDataInput {
   email: String
   dummy: String
   blogs: BlogUpdateManyWithoutOwnerInput
+  fans: UserUpdateManyWithoutFollowsInput
+  follows: UserUpdateManyWithoutFansInput
+}
+
+input UserUpdateWithoutFansDataInput {
+  name: String
+  email: String
+  dummy: String
+  comments: CommentUpdateManyWithoutAuthorInput
+  blogs: BlogUpdateManyWithoutOwnerInput
+  follows: UserUpdateManyWithoutFansInput
+}
+
+input UserUpdateWithoutFollowsDataInput {
+  name: String
+  email: String
+  dummy: String
+  comments: CommentUpdateManyWithoutAuthorInput
+  blogs: BlogUpdateManyWithoutOwnerInput
+  fans: UserUpdateManyWithoutFollowsInput
+}
+
+input UserUpdateWithWhereUniqueWithoutFansInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutFansDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutFollowsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutFollowsDataInput!
 }
 
 input UserUpsertWithoutBlogsInput {
@@ -929,6 +1017,18 @@ input UserUpsertWithoutBlogsInput {
 input UserUpsertWithoutCommentsInput {
   update: UserUpdateWithoutCommentsDataInput!
   create: UserCreateWithoutCommentsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutFansInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutFansDataInput!
+  create: UserCreateWithoutFansInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutFollowsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutFollowsDataInput!
+  create: UserCreateWithoutFollowsInput!
 }
 
 input UserWhereInput {
@@ -1106,6 +1206,12 @@ input UserWhereInput {
   blogs_every: BlogWhereInput
   blogs_some: BlogWhereInput
   blogs_none: BlogWhereInput
+  fans_every: UserWhereInput
+  fans_some: UserWhereInput
+  fans_none: UserWhereInput
+  follows_every: UserWhereInput
+  follows_some: UserWhereInput
+  follows_none: UserWhereInput
 }
 
 input UserWhereUniqueInput {

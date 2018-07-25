@@ -2,8 +2,8 @@ const { Prisma } = require('prisma-binding')
 
 const getPrismaTestInstance = () => {
   return new Prisma({
-    typeDefs: './src/generated/prisma.graphql', // the auto-generated GraphQL schema of the Prisma API
-    endpoint: 'http://localhost:4466', // the endpoint of the Prisma API (value set in `.env`)
+    typeDefs: '../src/generated/prisma.graphql', // the auto-generated GraphQL schema of the Prisma API
+    endpoint: 'http://localhost:4488', // the endpoint of the Prisma API (value set in `.env`)
     debug: true, // log all GraphQL queries & mutations sent to the Prisma API
     // secret: process.env.PRISMA_SECRET, // only needed if specified in `database/prisma.yml` (value set in `.env`)
   })
@@ -201,4 +201,100 @@ test('#删除用户u1', async () => {
     email:_run.email
   }})
   expect(result.email).toBe(_run.email)
-}) 
+})
+
+test('#创建用户a并b，并且a关注b成为b的粉丝,b又关注a', async () => {
+    const result = await ctx.db.mutation.createUser(
+        {
+            data: {
+                name: "a",
+                email: "aaaa@163.com",
+                follows: {
+                    create: {
+                        name: "b",
+                        email: "bbbb@163.com",
+                    }
+                }
+
+            }
+        },`{id,name,email,follows{id,name,email}}`
+    )
+    expect(result.name).toBe('a')
+    expect(result.follows[0].name).toBe('b')
+    _run.user_a_id = result.id
+    _run.user_a_email = result.email
+    _run.user_b_id = result.follows[0].id
+    _run.user_b_name = 'b'
+    _run.user_b_email = "bbbb@163.com"
+
+    const result2 = await ctx.db.mutation.updateUser(
+        {
+            data: {
+                follows: {
+                    connect: {
+                        id: _run.user_a_id
+                    }
+                }
+            },
+            where: {
+                id: _run.user_b_id
+            }
+        },`{id,name,email,follows{id,name,email}}`
+    )
+    console.log("多对多>>>")
+    console.log(result)
+    console.log(result2)
+    expect(result2.name).toBe('b')
+    expect(result2.follows[0].id).toBe(_run.user_a_id)
+})
+
+test('#查询用户a和他所有的粉丝，和关注的人', async () => {
+    const result = await ctx.db.query.user(
+        {
+            where: {
+                id: _run.user_a_id
+            }
+
+        },
+        `{
+              name
+              fans{
+                 email
+                 fans{
+                  name
+                        
+                  }
+                follows{
+                   name
+                }
+              }
+              follows{
+                 email
+              }
+              }`
+    )
+
+    console.log("多对多关联嵌套查询》》》》》》》》》")
+    console.log(result)
+    console.log(result.fans[0].fans[0])
+    expect(result.fans[0].fans[0].name).toBe('a')
+})
+
+test('#删除用户a和b，关联关系自动删除', async () => {
+    const result = await ctx.db.mutation.deleteManyUsers({
+        where: {
+            OR: [
+                {
+                    id: _run.user_a_id
+                },
+                {
+                    id: _run.user_b_id
+                }
+            ]
+        }
+    })
+
+    console.log("多对多关联删除》》》》》》》》》")
+    console.log(result)
+    expect(result.count).toBe(2)
+})
