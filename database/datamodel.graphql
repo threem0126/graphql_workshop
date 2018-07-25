@@ -2,10 +2,11 @@ type User {
   id: ID! @unique
   name:String!
   email: String! @unique
+  password: String! @default(value:"123456")
   comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
   blogs: [Blog!]! @relation(name: "BlogOwner", onDelete: CASCADE)
-  createdAt:DateTime!
-  updatedAt:DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Blog {
@@ -27,5 +28,4 @@ type Comment {
   blog: Blog! @relation(name: "Comments", onDelete: SET_NULL)
   author: User @relation(name: "CommentAuthor", onDelete: SET_NULL)
   dummy: String
-}
-
+} 

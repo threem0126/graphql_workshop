@@ -1,5 +1,10 @@
 # import * from './generated/prisma.graphql'
 
+type LoginPayload{
+  token:String!
+  user:User!
+} 
+
 type Query {  
   currentuser:User!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
@@ -8,7 +13,8 @@ type Query {
 }
 
 type Mutation {
-    createUser(name:String!,email:String):User
+    signup(name:String, email:String, password:String):LoginPayload
+    login(email:String, password:String):LoginPayload
     createBlog(title:String!):Blog #当前用户
     createComment(blogID:ID!, content:String!):Comment  #当前用户
     updateComment(commentID:ID!, content:String!):Comment  #当前用户
