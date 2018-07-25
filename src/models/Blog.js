@@ -1,6 +1,6 @@
-import { getUserId,AuthError } from '../utils'
+import { getUserId,AuthError } from '../lib/utils'
 import { forwardTo } from "prisma-binding";
-import {isMutation, isQuery, isQuery_forwardTo} from './resolvers.loader' 
+import {isMutation, isQuery, isQuery_forwardTo, isSubscription} from '../lib/resolvers.loader'
 
 let _run={
   currentUserID_mock:0
@@ -215,6 +215,22 @@ class BlogMutation {
   @isQuery_forwardTo 
   static comments(){
     return forwardTo
+  }
+
+  @isSubscription
+  static async feedSubscription() {
+    return {subscribe: (parent, args, ctx, info) => {
+      return ctx.db.subscription.blog(
+        {
+          where: {
+            node: {
+              isPublished: true,
+            },
+          },
+        },
+        info,
+      )
+    }}
   }
 }
 

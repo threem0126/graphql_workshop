@@ -1,6 +1,6 @@
 import './Auth'
-import './Blog'
+import './Blog' 
 // const { AuthPayload } = require('./AuthPayload')  
-import {RegistedResolvers} from './resolvers.loader'
+import {RegistedResolvers} from '../lib/resolvers.loader'
 
 module.exports = RegistedResolvers()

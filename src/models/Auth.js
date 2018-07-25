@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken' 
-import {isMutation, isQuery} from './resolvers.loader'
+import {isMutation, isQuery} from '../lib/resolvers.loader'
 
 class Auth {
   constructor() {
