@@ -276,4 +276,32 @@ test('#删除用户u1', async () => {
   const {deleteUserByEmail} = await client().request(query) 
   // console.log(deleteUserByEmail)
   expect(deleteUserByEmail.email).toBe(_run.email)
-}) 
+})
+
+test('#创建用户a并关联创建b，关注b,然后b再关注a', async()=>{
+  const query=`mutation{
+    createUser({
+      data:{
+        name:"a",
+        email:"aaaa@163.com",
+        follows:{
+          create:{
+              name:"b",
+              email:"bbbb@163.com"
+          }
+        }
+      }
+    }){
+        id
+        name
+        email
+        follows{
+            id
+            name
+            email
+        }
+    }
+  }`
+
+
+})
