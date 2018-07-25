@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Wed Jul 25 2018 09:57:41 GMT+0800 (CST)
+# timestamp: Wed Jul 25 2018 14:02:18 GMT+0800 (CST)
 
 type AggregateBlog {
   count: Int!
@@ -21,6 +21,8 @@ type BatchPayload {
 type Blog implements Node {
   id: ID!
   title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   owner(where: UserWhereInput): User!
   privateName: String
@@ -83,19 +85,21 @@ enum BlogOrderByInput {
   id_DESC
   title_ASC
   title_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   privateName_ASC
   privateName_DESC
   dummy_ASC
   dummy_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type BlogPreviousValues {
   id: ID!
   title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   privateName: String
   dummy: String
 }
@@ -283,6 +287,50 @@ input BlogWhereInput {
 
   """All values not ending with the given string."""
   title_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   privateName: String
 
   """All values that are not equal to given value."""
@@ -376,6 +424,8 @@ input BlogWhereUniqueInput {
 type Comment implements Node {
   id: ID!
   content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   blog(where: BlogWhereInput): Blog!
   author(where: UserWhereInput): User
   dummy: String
@@ -434,17 +484,19 @@ enum CommentOrderByInput {
   id_DESC
   content_ASC
   content_DESC
-  dummy_ASC
-  dummy_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  dummy_ASC
+  dummy_DESC
 }
 
 type CommentPreviousValues {
   id: ID!
   content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   dummy: String
 }
 
@@ -635,6 +687,50 @@ input CommentWhereInput {
 
   """All values not ending with the given string."""
   content_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   dummy: String
 
   """All values that are not equal to given value."""
@@ -682,6 +778,8 @@ input CommentWhereInput {
 input CommentWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -767,7 +865,8 @@ type User implements Node {
   email: String!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   blogs(where: BlogWhereInput, orderBy: BlogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Blog!]
-  dummy: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -783,7 +882,6 @@ type UserConnection {
 input UserCreateInput {
   name: String!
   email: String!
-  dummy: String
   comments: CommentCreateManyWithoutAuthorInput
   blogs: BlogCreateManyWithoutOwnerInput
 }
@@ -801,14 +899,12 @@ input UserCreateOneWithoutCommentsInput {
 input UserCreateWithoutBlogsInput {
   name: String!
   email: String!
-  dummy: String
   comments: CommentCreateManyWithoutAuthorInput
 }
 
 input UserCreateWithoutCommentsInput {
   name: String!
   email: String!
-  dummy: String
   blogs: BlogCreateManyWithoutOwnerInput
 }
 
@@ -828,19 +924,18 @@ enum UserOrderByInput {
   name_DESC
   email_ASC
   email_DESC
-  dummy_ASC
-  dummy_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   name: String!
   email: String!
-  dummy: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserSubscriptionPayload {
@@ -885,7 +980,6 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   name: String
   email: String
-  dummy: String
   comments: CommentUpdateManyWithoutAuthorInput
   blogs: BlogUpdateManyWithoutOwnerInput
 }
@@ -910,14 +1004,12 @@ input UserUpdateOneWithoutCommentsInput {
 input UserUpdateWithoutBlogsDataInput {
   name: String
   email: String
-  dummy: String
   comments: CommentUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateWithoutCommentsDataInput {
   name: String
   email: String
-  dummy: String
   blogs: BlogUpdateManyWithoutOwnerInput
 }
 
@@ -1060,46 +1152,50 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
-  dummy: String
+  createdAt: DateTime
 
   """All values that are not equal to given value."""
-  dummy_not: String
+  createdAt_not: DateTime
 
   """All values that are contained in given list."""
-  dummy_in: [String!]
+  createdAt_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  dummy_not_in: [String!]
+  createdAt_not_in: [DateTime!]
 
   """All values less than the given value."""
-  dummy_lt: String
+  createdAt_lt: DateTime
 
   """All values less than or equal the given value."""
-  dummy_lte: String
+  createdAt_lte: DateTime
 
   """All values greater than the given value."""
-  dummy_gt: String
+  createdAt_gt: DateTime
 
   """All values greater than or equal the given value."""
-  dummy_gte: String
+  createdAt_gte: DateTime
+  updatedAt: DateTime
 
-  """All values containing the given string."""
-  dummy_contains: String
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
 
-  """All values not containing the given string."""
-  dummy_not_contains: String
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
 
-  """All values starting with the given string."""
-  dummy_starts_with: String
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
 
-  """All values not starting with the given string."""
-  dummy_not_starts_with: String
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
 
-  """All values ending with the given string."""
-  dummy_ends_with: String
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
 
-  """All values not ending with the given string."""
-  dummy_not_ends_with: String
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
   comments_none: CommentWhereInput

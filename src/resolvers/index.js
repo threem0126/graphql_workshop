@@ -7,7 +7,7 @@ module.exports = {
   Query,
   Mutation: {
     // ...auth,
-    ...blog,
+    ...blog
   },
   // AuthPayload,
 }

@@ -39,7 +39,7 @@ const blog = {
     )
   },
 
-  // createComment(blogID:ID!, content:String!):Comment  #当前用户
+  // createComment(blogID:ID!, content:String!):Comment  #当前用户 
   async createComment(parent, { blogID, content }, ctx, info) {
     const {userId = _run.currentUserID_mock} = ctx
     const isBlogExist = ctx.db.exists.Blog({

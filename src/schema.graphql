@@ -2,6 +2,8 @@
 
 type Query {  
   currentuser:User!
+  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   user(where: UserWhereUniqueInput!): User 
 }
 

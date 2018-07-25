@@ -11,8 +11,9 @@ const Query = {
       throw new AuthError()
     return ctx.db.query.user({where:{id:userId}}, `{id, name}`)
   },
-
-  user:forwardTo("db")
+  user:forwardTo("db"),
+  users:forwardTo("db"),
+  comments:forwardTo("db")
 }
 
 module.exports = { Query }
