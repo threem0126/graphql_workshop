@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Jul 24 2018 15:15:47 GMT+0800 (CST)
+# timestamp: Wed Jul 25 2018 09:57:41 GMT+0800 (CST)
 
 type AggregateBlog {
   count: Int!
@@ -23,6 +23,7 @@ type Blog implements Node {
   title: String!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   owner(where: UserWhereInput): User!
+  privateName: String
   dummy: String
 }
 
@@ -38,6 +39,7 @@ type BlogConnection {
 
 input BlogCreateInput {
   title: String!
+  privateName: String
   dummy: String
   comments: CommentCreateManyWithoutBlogInput
   owner: UserCreateOneWithoutBlogsInput!
@@ -55,12 +57,14 @@ input BlogCreateOneWithoutCommentsInput {
 
 input BlogCreateWithoutCommentsInput {
   title: String!
+  privateName: String
   dummy: String
   owner: UserCreateOneWithoutBlogsInput!
 }
 
 input BlogCreateWithoutOwnerInput {
   title: String!
+  privateName: String
   dummy: String
   comments: CommentCreateManyWithoutBlogInput
 }
@@ -79,6 +83,8 @@ enum BlogOrderByInput {
   id_DESC
   title_ASC
   title_DESC
+  privateName_ASC
+  privateName_DESC
   dummy_ASC
   dummy_DESC
   updatedAt_ASC
@@ -90,6 +96,7 @@ enum BlogOrderByInput {
 type BlogPreviousValues {
   id: ID!
   title: String!
+  privateName: String
   dummy: String
 }
 
@@ -134,6 +141,7 @@ input BlogSubscriptionWhereInput {
 
 input BlogUpdateInput {
   title: String
+  privateName: String
   dummy: String
   comments: CommentUpdateManyWithoutBlogInput
   owner: UserUpdateOneWithoutBlogsInput
@@ -158,12 +166,14 @@ input BlogUpdateOneWithoutCommentsInput {
 
 input BlogUpdateWithoutCommentsDataInput {
   title: String
+  privateName: String
   dummy: String
   owner: UserUpdateOneWithoutBlogsInput
 }
 
 input BlogUpdateWithoutOwnerDataInput {
   title: String
+  privateName: String
   dummy: String
   comments: CommentUpdateManyWithoutBlogInput
 }
@@ -273,6 +283,46 @@ input BlogWhereInput {
 
   """All values not ending with the given string."""
   title_not_ends_with: String
+  privateName: String
+
+  """All values that are not equal to given value."""
+  privateName_not: String
+
+  """All values that are contained in given list."""
+  privateName_in: [String!]
+
+  """All values that are not contained in given list."""
+  privateName_not_in: [String!]
+
+  """All values less than the given value."""
+  privateName_lt: String
+
+  """All values less than or equal the given value."""
+  privateName_lte: String
+
+  """All values greater than the given value."""
+  privateName_gt: String
+
+  """All values greater than or equal the given value."""
+  privateName_gte: String
+
+  """All values containing the given string."""
+  privateName_contains: String
+
+  """All values not containing the given string."""
+  privateName_not_contains: String
+
+  """All values starting with the given string."""
+  privateName_starts_with: String
+
+  """All values not starting with the given string."""
+  privateName_not_starts_with: String
+
+  """All values ending with the given string."""
+  privateName_ends_with: String
+
+  """All values not ending with the given string."""
+  privateName_not_ends_with: String
   dummy: String
 
   """All values that are not equal to given value."""

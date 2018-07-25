@@ -156,7 +156,7 @@ test('#批量更新标题含"abc"的评论（修改为‘abcdef’，c3和c4被�
       content_contains:"abc"
     }
   })
-  console.log(result)
+  console.log(count)
   expect(count).toBeGreaterThan(0)
 })  
 

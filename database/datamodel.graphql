@@ -12,6 +12,7 @@ type Blog {
   title:String!
   comments: [Comment!]! @relation(name: "Comments", onDelete: CASCADE)
   owner: User! @relation(name: "BlogOwner", onDelete: SET_NULL)
+  privateName:String
   dummy: String
 }
 
