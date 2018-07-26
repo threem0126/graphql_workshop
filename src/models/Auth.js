@@ -1,8 +1,12 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken' 
 import {isMutation, isQuery} from '../lib/resolvers.loader'
+import _GKBase from './../models_private/_GKBase'
 
-class Auth {
+class Auth { 
+  /**
+   * 业务静态类，不提供对象实例化
+   */
   constructor() {
       throw '静态业务功能类无法实例化'
   }
