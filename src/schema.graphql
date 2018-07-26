@@ -27,4 +27,7 @@ type Mutation {
     deleteUserByEmail(email:String!):User 
 }
 
+type Subscription{
+  feedSubscription: BlogSubscriptionPayload!
+}
  

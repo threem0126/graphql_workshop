@@ -1,5 +1,5 @@
 import { request, GraphQLClient } from 'graphql-request'
-import { single } from '../node_modules/rxjs/operator/single';
+import { single } from 'rxjs/operator/single';
 
 const get_userID = ()=> _run.userID;
 const client = ()=>{
@@ -14,12 +14,13 @@ afterEach(async () => {
 })
 
 let _run ={
-  email : `${Math.random()}@qq.com`
+  email : `${Math.random()}@qq.com`,
+  password: "123456"
 }
 
 test('#注册一个用户，拿到token', async () => {   
   const query = `mutation{
-    signup(name: "huangyong", email:"${_run.email}", password:"123456") {
+    signup(name: "huangyong", email:"${_run.email}", password:"${_run.password}") {
       token,
       user{
         id,
@@ -30,10 +31,25 @@ test('#注册一个用户，拿到token', async () => {
     }
   }`
   const {signup} = await client().request(query)
-  console.log(signup)
+  // console.log(signup)
   expect(signup.user.email).toBe(_run.email)
-  _run.token = signup.token 
-  _run.userID = signup.user.id 
+})
+
+test('#登录已注册用户', async () => {   
+  const query = `mutation{
+    login( email:"${_run.email}", password:"${_run.password}" ) {
+      token,
+      user{
+        id
+      }
+    }
+  }`
+  const {login} = await client().request(query)
+  expect(login.token).not.toBeNull()
+  expect(login.user).not.toBeNull()
+  //将token放入到运行时缓存中，在后续用例graphql请求headers中传递到
+  _run.token = login.token 
+  _run.userID = login.user.id 
 })
 
 test('#用户创建一篇博客b1', async () => {  

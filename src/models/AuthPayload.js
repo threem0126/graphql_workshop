@@ -4,4 +4,4 @@ const AuthPayload = {
   },
 }
 
-module.exports = { AuthPayload }
+export default AuthPayload
