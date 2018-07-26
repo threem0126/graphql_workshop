@@ -1,5 +1,5 @@
-# source: http://localhost:4466
-# timestamp: Wed Jul 25 2018 09:57:41 GMT+0800 (CST)
+# source: http://localhost:6789
+# timestamp: Thu Jul 26 2018 13:41:52 GMT+0800 (CST)
 
 type AggregateBlog {
   count: Int!
@@ -21,6 +21,8 @@ type BatchPayload {
 type Blog implements Node {
   id: ID!
   title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   owner(where: UserWhereInput): User!
   privateName: String
@@ -83,19 +85,21 @@ enum BlogOrderByInput {
   id_DESC
   title_ASC
   title_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
   privateName_ASC
   privateName_DESC
   dummy_ASC
   dummy_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type BlogPreviousValues {
   id: ID!
   title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   privateName: String
   dummy: String
 }
@@ -283,6 +287,50 @@ input BlogWhereInput {
 
   """All values not ending with the given string."""
   title_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   privateName: String
 
   """All values that are not equal to given value."""
@@ -376,6 +424,8 @@ input BlogWhereUniqueInput {
 type Comment implements Node {
   id: ID!
   content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   blog(where: BlogWhereInput): Blog!
   author(where: UserWhereInput): User
   dummy: String
@@ -434,17 +484,19 @@ enum CommentOrderByInput {
   id_DESC
   content_ASC
   content_DESC
-  dummy_ASC
-  dummy_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  dummy_ASC
+  dummy_DESC
 }
 
 type CommentPreviousValues {
   id: ID!
   content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   dummy: String
 }
 
@@ -635,6 +687,50 @@ input CommentWhereInput {
 
   """All values not ending with the given string."""
   content_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   dummy: String
 
   """All values that are not equal to given value."""
@@ -682,6 +778,8 @@ input CommentWhereInput {
 input CommentWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -768,11 +866,11 @@ type User implements Node {
   password: String!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   blogs(where: BlogWhereInput, orderBy: BlogOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Blog!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
   dummy: String
   fans(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   follows(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -789,6 +887,7 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String
+  dummy: String
   comments: CommentCreateManyWithoutAuthorInput
   blogs: BlogCreateManyWithoutOwnerInput
   fans: UserCreateManyWithoutFollowsInput
@@ -819,6 +918,7 @@ input UserCreateWithoutBlogsInput {
   name: String!
   email: String!
   password: String
+  dummy: String
   comments: CommentCreateManyWithoutAuthorInput
   fans: UserCreateManyWithoutFollowsInput
   follows: UserCreateManyWithoutFansInput
@@ -828,6 +928,7 @@ input UserCreateWithoutCommentsInput {
   name: String!
   email: String!
   password: String
+  dummy: String
   blogs: BlogCreateManyWithoutOwnerInput
   fans: UserCreateManyWithoutFollowsInput
   follows: UserCreateManyWithoutFansInput
@@ -836,6 +937,7 @@ input UserCreateWithoutCommentsInput {
 input UserCreateWithoutFansInput {
   name: String!
   email: String!
+  password: String
   dummy: String
   comments: CommentCreateManyWithoutAuthorInput
   blogs: BlogCreateManyWithoutOwnerInput
@@ -845,6 +947,7 @@ input UserCreateWithoutFansInput {
 input UserCreateWithoutFollowsInput {
   name: String!
   email: String!
+  password: String
   dummy: String
   comments: CommentCreateManyWithoutAuthorInput
   blogs: BlogCreateManyWithoutOwnerInput
@@ -873,6 +976,8 @@ enum UserOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  dummy_ASC
+  dummy_DESC
 }
 
 type UserPreviousValues {
@@ -882,6 +987,7 @@ type UserPreviousValues {
   password: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  dummy: String
 }
 
 type UserSubscriptionPayload {
@@ -927,6 +1033,7 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  dummy: String
   comments: CommentUpdateManyWithoutAuthorInput
   blogs: BlogUpdateManyWithoutOwnerInput
   fans: UserUpdateManyWithoutFollowsInput
@@ -972,6 +1079,7 @@ input UserUpdateWithoutBlogsDataInput {
   name: String
   email: String
   password: String
+  dummy: String
   comments: CommentUpdateManyWithoutAuthorInput
   fans: UserUpdateManyWithoutFollowsInput
   follows: UserUpdateManyWithoutFansInput
@@ -981,6 +1089,7 @@ input UserUpdateWithoutCommentsDataInput {
   name: String
   email: String
   password: String
+  dummy: String
   blogs: BlogUpdateManyWithoutOwnerInput
   fans: UserUpdateManyWithoutFollowsInput
   follows: UserUpdateManyWithoutFansInput
@@ -989,6 +1098,7 @@ input UserUpdateWithoutCommentsDataInput {
 input UserUpdateWithoutFansDataInput {
   name: String
   email: String
+  password: String
   dummy: String
   comments: CommentUpdateManyWithoutAuthorInput
   blogs: BlogUpdateManyWithoutOwnerInput
@@ -998,6 +1108,7 @@ input UserUpdateWithoutFansDataInput {
 input UserUpdateWithoutFollowsDataInput {
   name: String
   email: String
+  password: String
   dummy: String
   comments: CommentUpdateManyWithoutAuthorInput
   blogs: BlogUpdateManyWithoutOwnerInput
@@ -1249,6 +1360,46 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  dummy: String
+
+  """All values that are not equal to given value."""
+  dummy_not: String
+
+  """All values that are contained in given list."""
+  dummy_in: [String!]
+
+  """All values that are not contained in given list."""
+  dummy_not_in: [String!]
+
+  """All values less than the given value."""
+  dummy_lt: String
+
+  """All values less than or equal the given value."""
+  dummy_lte: String
+
+  """All values greater than the given value."""
+  dummy_gt: String
+
+  """All values greater than or equal the given value."""
+  dummy_gte: String
+
+  """All values containing the given string."""
+  dummy_contains: String
+
+  """All values not containing the given string."""
+  dummy_not_contains: String
+
+  """All values starting with the given string."""
+  dummy_starts_with: String
+
+  """All values not starting with the given string."""
+  dummy_not_starts_with: String
+
+  """All values ending with the given string."""
+  dummy_ends_with: String
+
+  """All values not ending with the given string."""
+  dummy_not_ends_with: String
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
   comments_none: CommentWhereInput

@@ -10,6 +10,16 @@ class BlogMutation {
   constructor() {
       throw '静态业务功能类无法实例化'
   }
+
+  @isMutation
+  static async createUserAandB(parent, args, ctx , info){
+        const {userId = _run.currentUserID_mock} = ctx
+        return ctx.db.mutation.createUser({
+            data:{
+                ...args
+            }
+        },info)
+  }
   
   // createBlog(title:String!):Blog #当前用户
   @isMutation

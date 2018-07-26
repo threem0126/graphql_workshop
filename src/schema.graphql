@@ -16,6 +16,7 @@ type Mutation {
     signup(name:String, email:String, password:String):LoginPayload
     login(email:String, password:String):LoginPayload
     createBlog(title:String!):Blog #当前用户
+    createUserAandB(name:String, email:String, password:String):User!
     createComment(blogID:ID!, content:String!):Comment  #当前用户
     updateComment(commentID:ID!, content:String!):Comment  #当前用户
     deleteComment(commentID:ID!):Comment  #当前用户
@@ -29,5 +30,16 @@ type Mutation {
 
 type Subscription{
   feedSubscription: BlogSubscriptionPayload!
+}
+
+input UserCreateInput {
+    name: String!
+    email: String!
+    password: String
+    dummy: String
+    comments: CommentCreateManyWithoutAuthorInput
+    blogs: BlogCreateManyWithoutOwnerInput
+    fans: UserCreateManyWithoutFollowsInput
+    follows: UserCreateManyWithoutFansInput
 }
  
