@@ -1,6 +1,6 @@
 type User {
   id: ID! @unique
-  name:String!
+  name:String!  @upper
   email: String! @unique
   password: String! @default(value:"123456")
   comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)

@@ -1,13 +1,11 @@
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken' 
-import {isMutation, isQuery} from '../lib/resolvers.loader'
+import jwt from 'jsonwebtoken'  
 
 class _GKBase {
   constructor() {
       throw '静态业务功能类无法实例化'
   }
 
-  @isMutation
   static async TODO(parent, {params}, ctx, info) { 
   }
 }

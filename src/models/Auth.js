@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken' 
-import {isMutation, isQuery} from '../lib/resolvers.loader'
+import { forwardTo } from "prisma-binding";
+import {isMutation, isQuery, isQuery_forwardTo} from '../lib/resolvers.loader'
 import _GKBase from './../models_private/_GKBase'
 
-class Auth { 
+class _ { 
   /**
    * 业务静态类，不提供对象实例化
    */
@@ -40,7 +41,27 @@ class Auth {
       token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
       user,
     }
+  } 
+
+  @isQuery
+  static async currentuser(parent, args, ctx, info) { 
+    let { _hello } = ctx
+    console.log(_hello);
+    const {userId} = ctx
+    if(!userId)
+      throw new AuthError()
+    return ctx.db.query.user({where:{id:userId}}, `{id, name}`)
+  } 
+
+  @isQuery_forwardTo 
+  static user(){ 
+    return forwardTo
+  }
+
+  @isQuery_forwardTo 
+  static users(){ 
+    return forwardTo
   }
 }
 
-export default Auth
+export default _
