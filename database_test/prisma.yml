@@ -1,5 +1,5 @@
 # The endpoint of your Prisma API (deployed to a Prisma Sandbox).
-endpoint: "http://localhost:6789"
+endpoint: "http://106.75.17.86:6789/"
 
 # The file containing the definition of your data model.
 datamodel: datamodel.graphql
@@ -12,10 +12,10 @@ datamodel: datamodel.graphql
 # `src/generated/prisma.graphql` (as specfied in `.graphqlconfig.yml`).
 hooks:
   post-deploy:
-    - graphql get-schema --project database
+    - graphql get-schema --project database_test
 #    - graphql codegen 
 
 # If specified, the `secret` must be used to generate a JWT which is attached
 # to the `Authorization` header of HTTP requests made against the Prisma API.
 # Info: https://www.prisma.io/docs/reference/prisma-api/concepts-utee3eiquo#authentication
-# secret: ""
+secret: "test_106_75_17_86_lkqo20zqeMuHa7640"

@@ -1,0 +1,37 @@
+type User {
+  id: ID! @unique
+  name:String!  @upper
+  email: String! @unique
+  password: String! @default(value:"123456")
+  comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
+  blogs: [Blog!]! @relation(name: "BlogOwner", onDelete: CASCADE)
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Blog {
+  id: ID! @unique
+  title:String!
+  createdAt:DateTime!
+  updatedAt:DateTime!
+  comments: [Comment!]! @relation(name: "Comments", onDelete: CASCADE)
+  owner: User! @relation(name: "BlogOwner", onDelete: SET_NULL)
+  privateName:String
+  dummy: String
+}
+
+type Comment {
+  id: ID! @unique
+  content:String!
+  createdAt:DateTime!
+  updatedAt:DateTime!
+  blog: Blog! @relation(name: "Comments", onDelete: SET_NULL)
+  author: User @relation(name: "CommentAuthor", onDelete: SET_NULL)
+  dummy: String
+} 
+
+type User2 {
+  id: ID! @unique
+  name:String!  @upper
+  email: String! @unique
+}
