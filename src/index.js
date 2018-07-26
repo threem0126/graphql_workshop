@@ -1,17 +1,30 @@
-const { GraphQLServer } = require('graphql-yoga')
-const { Prisma } = require('prisma-binding')
-const { RedisCache } = require('apollo-server-cache-redis');
-const { getUserId } = require('./lib/utils')
-const { default: costAnalysis } = require('graphql-cost-analysis')
-const customDirectives = require('./lib/directives');
-const resolvers = require('./models/_index.js')
+import { GraphQLServer } from 'graphql-yoga'
+import {Prisma} from 'prisma-binding'
+const { RedisCache } = 'apollo-server-cache-redis';
+import { getUserId } from './lib/utils'
+import costAnalysis from 'graphql-cost-analysis'
+import customDirectives from './lib/directives'
+import {resolvers}  from './models/_index.js'
 //https://github.com/pa-bru/graphql-cost-analysis#costanalysis-configuration
 
-const db = new Prisma({
+let prisma_options = {
   typeDefs: 'src/generated/prisma.graphql', // the auto-generated GraphQL schema of the Prisma API
   endpoint: process.env.PRISMA_ENDPOINT, // the endpoint of the Prisma API (value set in `.env`)
+  secret: process.env.PRISMA_SECRET, // only needed if specified in `database/prisma.yml` (value set in `.env`)
+}
+
+if(process.env.Prisma_Test==="1"){
+  prisma_options = {
+    ...prisma_options,
+    typeDefs: 'src/generated_test/prisma.graphql', 
+    endpoint: 'http://106.75.17.86:6789/',
+    secret: 'test_106_75_17_86_lkqo20zqeMuHa7640'
+  }
+}
+
+const db = new Prisma({
+  ...prisma_options,
   debug: true, // log all GraphQL queries & mutations sent to the Prisma API
-  // secret: process.env.PRISMA_SECRET, // only needed if specified in `database/prisma.yml` (value set in `.env`)
 }) 
 
 const server = new GraphQLServer({
@@ -47,4 +60,7 @@ const options = {
     })
   ]
 }
-server.start(options, () => console.log('Server is running on http://localhost:4000'))
+server.start(options, () => {
+  console.log(`Prisma-API sendpoint is ${prisma_options.endpoint}, ${ prisma_options.secret?'with secret need!':'without secret' }`)
+  console.log('Application Server is running on http://localhost:4000');
+})

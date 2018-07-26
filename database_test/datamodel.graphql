@@ -7,10 +7,6 @@ type User {
   blogs: [Blog!]! @relation(name: "BlogOwner", onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
-  dummy: String
-  fans: [User!]! @relation(name: "FansFollows", onDelete: SET_NULL)
-  follows: [User!]! @relation(name: "FansFollows", onDelete: SET_NULL)
-
 }
 
 type Blog {
@@ -32,4 +28,10 @@ type Comment {
   blog: Blog! @relation(name: "Comments", onDelete: SET_NULL)
   author: User @relation(name: "CommentAuthor", onDelete: SET_NULL)
   dummy: String
+} 
+
+type User2 {
+  id: ID! @unique
+  name:String!  @upper
+  email: String! @unique
 }

@@ -1,5 +1,5 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
-const { defaultFieldResolver } = require('graphql') 
+import { SchemaDirectiveVisitor } from 'graphql-tools'
+import { defaultFieldResolver } from 'graphql'
 
 class UpperDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
@@ -15,6 +15,6 @@ class UpperDirective extends SchemaDirectiveVisitor {
   }
 }  
 
-module.exports = { 
-    upper: UpperDirective
+export default { 
+  upper: UpperDirective
 }

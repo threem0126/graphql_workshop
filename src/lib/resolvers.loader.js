@@ -39,6 +39,6 @@ export const isQuery_forwardTo = async function (target, name, descriptor){
   return descriptor;
 }
 
-export const RegistedResolvers = ()=>{
+export const getRegistedResolvers = ()=>{
   return rootType
 }

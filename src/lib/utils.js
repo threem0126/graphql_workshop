@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken') 
+import jwt from 'jsonwebtoken'
 
 function getUserId(request) {
   const temp_suserID = request.header('userID')||0 

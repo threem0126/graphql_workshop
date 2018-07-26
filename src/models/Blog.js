@@ -6,7 +6,7 @@ let _run={
   currentUserID_mock:0
 }
 
-class BlogMutation {
+class _ {
   constructor() {
       throw '静态业务功能类无法实例化'
   }
@@ -199,28 +199,7 @@ class BlogMutation {
         email
       }
     }, info)
-  }
-
-
-  @isQuery
-  static async currentuser(parent, args, ctx, info) { 
-    let { _hello } = ctx
-    console.log(_hello);
-    const {userId} = ctx
-    if(!userId)
-      throw new AuthError()
-    return ctx.db.query.user({where:{id:userId}}, `{id, name}`)
-  }
-
-  @isQuery_forwardTo 
-  static user(){ 
-    return forwardTo
-  }
-
-  @isQuery_forwardTo 
-  static users(){ 
-    return forwardTo
-  }
+  } 
 
   @isQuery_forwardTo 
   static comments(){
@@ -244,4 +223,4 @@ class BlogMutation {
   }
 }
 
-export default BlogMutation
+export default _
