@@ -4,3 +4,4 @@ import {getRegistedResolvers} from '../lib/resolvers.loader'
  
 
 export const resolvers = getRegistedResolvers();
+ 

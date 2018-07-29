@@ -5,11 +5,12 @@ type LoginPayload{
   user:User!
 } 
 
-type Query {  
-  currentuser:User!
-  comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  user(where: UserWhereUniqueInput!): User 
+type Query {
+    currentuser:User!
+    comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
+    users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+    user(where: UserWhereUniqueInput!): User
+    gettestUser: testUser
 }
 
 type Mutation {
@@ -30,4 +31,19 @@ type Mutation {
 type Subscription{
   feedSubscription: BlogSubscriptionPayload!
 }
- 
+
+type testUser{
+    name:String!
+}
+
+type User implements Node {
+    id: ID!
+    name: String!
+    name2: String
+    email: String!
+    password: String!
+    comments: [Comment!]
+    blogs: [Blog!]
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}

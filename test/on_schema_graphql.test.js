@@ -413,6 +413,7 @@ test('#查询从未发表过标题带b1字样博客的用户', async () => {
     ){
       id,
       name,
+      name2,
       email,
       blogs{
         id,
@@ -432,7 +433,8 @@ test('#删除用户u1', async () => {
     ){
       id,
       name,
-      email
+      email,
+      name2
     }
   }`
   const {deleteUserByEmail} = await client().request(query) 

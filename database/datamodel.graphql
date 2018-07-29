@@ -2,6 +2,7 @@ type User {
   id: ID! @unique
   name:String!  @upper
   email: String! @unique
+  name2:String @default(value:"name2")
   password: String! @default(value:"123456")
   comments: [Comment!]! @relation(name: "CommentAuthor", onDelete: CASCADE)
   blogs: [Blog!]! @relation(name: "BlogOwner", onDelete: CASCADE)
